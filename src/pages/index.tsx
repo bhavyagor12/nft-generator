@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import { useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
 import axios from "axios";
+import ReactLoading from "react-loading";
 
 export async function getConfiguration() {
   const configuration = new Configuration({
@@ -43,6 +44,16 @@ export default function Home({ response }: any) {
       });
   };
 
+  const handleDownload = () => {
+    if (image) {
+      // Open new window with image URL
+      const downloadLink = document.createElement("a");
+      downloadLink.href = image;
+      downloadLink.download = "image.jpg"; // Specify the filename for the downloaded image
+      downloadLink.click();
+    }
+  };
+
   return (
     <main>
       <Navbar />
@@ -63,7 +74,20 @@ export default function Home({ response }: any) {
             Generate Image
           </button>
         )}
-        {isImage && !loading && <img src={image} alt="Generated Image" />}
+        {loading && (
+          <ReactLoading
+            type="bars"
+            color="#00BFFF"
+            height={"20%"}
+            width={"20%"}
+          />
+        )}
+        {isImage && <img src={image} alt="Generated Image" />}
+        {image && (
+          <button className="btn btn-primary mt-[2%]" onClick={handleDownload}>
+            Download image
+          </button>
+        )}
       </div>
     </main>
   );
