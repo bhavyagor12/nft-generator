@@ -15,7 +15,9 @@ export default function Home({ response }: any) {
   const [prompt, setPrompt] = useState<string>("");
   const [image, setImage] = useState<string>("");
   const [isImage, setIsImage] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const generateImage = async () => {
+    setLoading(true);
     const openaiApiKey = process.env.NEXT_PUBLIC_OPEN_AI;
     const apiUrl = "https://api.openai.com/v1/images/generations";
 
@@ -32,6 +34,7 @@ export default function Home({ response }: any) {
     axios
       .post(apiUrl, data, { headers })
       .then((response) => {
+        setLoading(false);
         setIsImage(true);
         setImage(response.data.data[0].url);
       })
@@ -55,12 +58,12 @@ export default function Home({ response }: any) {
             onChange={(e) => setPrompt(e.target.value)}
           />
         </div>
-        {!isImage && (
+        {!isImage && !loading && (
           <button className="btn btn-primary" onClick={generateImage}>
             Generate Image
           </button>
         )}
-        {isImage && <img src={image} alt="Generated Image" />}
+        {isImage && !loading && <img src={image} alt="Generated Image" />}
       </div>
     </main>
   );
