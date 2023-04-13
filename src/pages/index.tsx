@@ -8,6 +8,7 @@ export default function Home({ response }: any) {
   const activeTab = (e: any) => {
     const id = e.target.id;
     if (id === "1") {
+      console.log("hiii");
       setActive(true);
     } else {
       setActive(false);
